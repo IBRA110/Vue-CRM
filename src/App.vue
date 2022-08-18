@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-	<div>
+	<div id="app">
 		<component :is="layout">
 			<router-view/>
 		</component>
