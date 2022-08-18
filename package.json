@@ -48,7 +48,7 @@
     "rules": {
       "no-tabs":"off",
       "indent": "off",
-      "quotes": "off" 
+      "quotes": "off"
     }
   },
   "browserslist": [
