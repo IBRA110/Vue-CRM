@@ -1,7 +1,7 @@
 /* eslint-disable */
 <template>
   <div class="app-main-layout">
-    <NavBarComponent @click="isOpen = !isOpen"/>
+    <NavBarComponent @onClick="isOpen = !isOpen"/>
     <SideBarComponent :class="{open: isOpen}"/>
     <main class="app-content" :class="{full: !isOpen}">
       <div class="app-page">
