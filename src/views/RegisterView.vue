@@ -1,36 +1,46 @@
 <template>
-  <form class="card auth-card">
+  <form class="card auth-card" @submit.prevent="onSubmit">
     <div class="card-content">
       <span class="card-title">Домашняя бухгалтерия</span>
       <div class="input-field">
         <input
             id="email"
             type="text"
-        >
+            v-model="v$.form.email.$model"
+            :class="{ invalid: (v$.form.email.$dirty && v$.form.email.$errors.length) }"
+            >
         <label for="email">Email</label>
-        <small class="helper-text invalid">Email</small>
+        <div v-for="(error, index) of v$.form.email.$errors" :key="index">
+          <small class="helper-text invalid">{{ error.$message }}</small>
+        </div>
       </div>
       <div class="input-field">
         <input
             id="password"
             type="password"
-            class="validate"
+            v-model="v$.form.password.$model"
+            :class="{ invalid: (v$.form.password.$dirty && v$.form.email.$errors.length) }"
         >
         <label for="password">Пароль</label>
-        <small class="helper-text invalid">Password</small>
+        <div v-for="(error, index) of v$.form.password.$errors" :key="index">
+          <small class="helper-text invalid">{{ error.$message }}</small>
+        </div>
       </div>
       <div class="input-field">
         <input
             id="name"
             type="text"
-            class="validate"
+            v-model="v$.form.name.$model"
+            :class="{ invalid: (v$.form.password.$dirty && v$.form.email.$errors.length) }"
         >
         <label for="name">Имя</label>
-        <small class="helper-text invalid">Name</small>
+        <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+          <small class="helper-text invalid">{{ error.$message }}</small>
+        </div>
       </div>
       <p>
         <label>
-          <input type="checkbox" />
+          <input type="checkbox" v-model="v$.form.agree.$model" />
           <span>С правилами согласен</span>
         </label>
       </p>
@@ -48,9 +58,61 @@
 
       <p class="center">
         Уже есть аккаунт?
-        <a href="/">Войти!</a>
+        <router-link to="/login">Войти!</router-link>
       </p>
     </div>
   </form>
 
 </template>
+<script>
+import useVuelidate from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
+
+export default {
+  name: 'register-view',
+  setup () {
+    return { v$: useVuelidate() }
+  },
+  data () {
+    return {
+      form: {
+        email: '',
+        password: '',
+        name: '',
+        agree: false
+      }
+    }
+  },
+  validations () {
+    return {
+      form: {
+        email: {
+          required,
+          email
+        },
+        password: {
+            required,
+            min: minLength(8)
+        },
+        name: { required },
+        agree: { checked: v => v }
+      }
+    }
+  },
+    methods: {
+    onSubmit () {
+      if (this.v$.$invalid) {
+        this.v$.$touch()
+        return
+      }
+      const formData = {
+        email: this.form.email,
+        password: this.form.password,
+        name: this.form.name
+      }
+      console.log(formData)
+      this.$router.push('/')
+    }
+  }
+}
+</script>
