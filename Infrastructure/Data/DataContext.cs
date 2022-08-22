@@ -12,12 +12,5 @@ public class DataContext : DbContext
     {
         Configuration = configuration;
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        // connect to sql server database
-        options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase"));
-    }
-
     public DbSet<User> Users { get; set; }
 }
