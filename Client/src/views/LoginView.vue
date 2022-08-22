@@ -77,7 +77,7 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
+    async onSubmit () {
       if (this.v$.$invalid) {
         this.v$.$touch()
         return
@@ -86,7 +86,7 @@ export default {
         email: this.form.email,
         password: this.form.password
       }
-      console.log(formData)
+			await this.$store.dispatch('login', formData)
       this.$router.push('/')
     }
   },

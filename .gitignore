@@ -21,3 +21,10 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Dotnet
+obj
+bin
+.vscode
+appsettings.json
+*.db
