@@ -2,6 +2,7 @@
 <template>
 	<form class="card auth-card" @submit.prevent="onSubmit">
     <div class="card-content">
+			<p class='succ' v-if="success">{{ success }}</p>
       <span class="card-title">Домашняя бухгалтерия</span>
       <div class="input-field">
         <input
@@ -50,6 +51,7 @@
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
 import messages from '../utils/messages'
+import axios from 'axios'
 
 export default {
   setup () {
@@ -61,8 +63,11 @@ export default {
         email: '',
         password: ''
       }
-    }
+		}
   },
+	beforeCreate () {
+		console.log('a')
+	},
   validations () {
     return {
       form: {
@@ -82,12 +87,19 @@ export default {
         this.v$.$touch()
         return
       }
-      const formData = {
-        email: this.form.email,
-        password: this.form.password
-      }
-			await this.$store.dispatch('login', formData)
-      this.$router.push('/')
+			const requestOptions = {
+				email: this.form.email,
+				password: this.form.password
+			}
+			await axios.post('http://localhost:5000/users/authenticate', requestOptions)
+				.then(res => {
+					localStorage.setItem('userName', res.data.name)
+					localStorage.setItem('token', res.data.token)
+					this.$router.push('/')
+				})
+				.catch(err => {
+					this.$message('err', err.response.data.message)
+				})
     }
   },
 	mounted () {
@@ -97,3 +109,8 @@ export default {
 	}
 }
 </script>
+<style>
+.succ{
+	color: green;
+}
+</style>

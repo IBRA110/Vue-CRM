@@ -67,6 +67,7 @@
 <script>
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
+import axios from 'axios'
 
 export default {
   name: 'register-view',
@@ -99,19 +100,25 @@ export default {
       }
     }
   },
-    methods: {
-    onSubmit () {
+  methods: {
+    async onSubmit () {
       if (this.v$.$invalid) {
         this.v$.$touch()
         return
       }
-      const formData = {
-        email: this.form.email,
-        password: this.form.password,
-        name: this.form.name
-      }
-      console.log(formData)
-      this.$router.push('/')
+			const requestOptions = {
+				name: this.form.name,
+				email: this.form.email,
+				password: this.form.password
+			}
+			await axios.post('http://localhost:5000/users/register', requestOptions)
+				.then(res => {
+					this.$message('mess', res.data.message)
+					this.$router.push('/login')
+				})
+				.catch(err => {
+					this.$message('err', err.response.data.message)
+				})
     }
   }
 }

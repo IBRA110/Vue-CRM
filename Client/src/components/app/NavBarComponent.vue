@@ -17,7 +17,7 @@
               data-target="dropdown"
 							ref="dropdown"
           >
-            USER NAME
+            {{ name }}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -46,13 +46,16 @@ export default {
 	data: () => ({
 		date: new Date(),
 		interval: null,
-		dropdown: null
+		dropdown: null,
+		name: localStorage.getItem('userName')
 	}),
 	methods: {
 		onClick () {
 			this.$emit('onClick')
 		},
 		logout () {
+			localStorage.removeItem('token')
+			localStorage.removeItem('userName')
 			this.$router.push('/login?message=logout')
 		}
 	},
